@@ -45,11 +45,13 @@ With rtk: **~45,000 tokens** → **70% reduction**
 curl -fsSL https://raw.githubusercontent.com/pszymkowiak/rtk/master/install.sh | sh
 ```
 
-### Homebrew (macOS)
+### Homebrew (macOS) - Coming Soon
+<!--
 ```bash
 brew tap pszymkowiak/rtk
 brew install rtk
 ```
+-->
 
 ### Cargo
 ```bash
