@@ -45,7 +45,7 @@ fn run_diff(args: &[String], max_lines: Option<usize>, verbose: u8) -> Result<()
         if !output.status.success() {
             let stderr = String::from_utf8_lossy(&output.stderr);
             eprintln!("{}", stderr);
-            return Ok(());
+            std::process::exit(output.status.code().unwrap_or(1));
         }
 
         let stdout = String::from_utf8_lossy(&output.stdout);
@@ -183,7 +183,11 @@ fn run_log(args: &[String], _max_lines: Option<usize>, verbose: u8) -> Result<()
         cmd.arg("-10");
     }
 
-    cmd.arg("--no-merges");
+    // Only add --no-merges if user didn't explicitly request merge commits
+    let wants_merges = args.iter().any(|arg| arg == "--merges" || arg == "--min-parents=2");
+    if !wants_merges {
+        cmd.arg("--no-merges");
+    }
 
     // Pass all user arguments
     for arg in args {
@@ -195,7 +199,8 @@ fn run_log(args: &[String], _max_lines: Option<usize>, verbose: u8) -> Result<()
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
         eprintln!("{}", stderr);
-        return Ok(());
+        // Propagate git's exit code
+        std::process::exit(output.status.code().unwrap_or(1));
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);
