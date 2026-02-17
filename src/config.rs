@@ -2,6 +2,35 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum AIPlatform {
+    Claude,
+    Gemini,
+    Cursor,
+    Windsurf,
+}
+
+impl Default for AIPlatform {
+    fn default() -> Self {
+        AIPlatform::Claude
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PlatformConfig {
+    /// Which AI coding assistant platform is being used
+    pub ai_platform: AIPlatform,
+}
+
+impl Default for PlatformConfig {
+    fn default() -> Self {
+        Self {
+            ai_platform: AIPlatform::Claude,
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Config {
     #[serde(default)]
@@ -12,6 +41,8 @@ pub struct Config {
     pub filters: FilterConfig,
     #[serde(default)]
     pub tee: crate::tee::TeeConfig,
+    #[serde(default)]
+    pub platform: PlatformConfig,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -124,4 +155,58 @@ pub fn show_config() -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_default_platform_is_claude() {
+        let config = Config::default();
+        assert_eq!(config.platform.ai_platform, AIPlatform::Claude);
+    }
+
+    #[test]
+    fn test_platform_config_serialization() {
+        let config = Config {
+            platform: PlatformConfig {
+                ai_platform: AIPlatform::Gemini,
+            },
+            ..Default::default()
+        };
+
+        let toml_str = toml::to_string(&config).unwrap();
+        assert!(toml_str.contains("gemini"));
+    }
+
+    #[test]
+    fn test_platform_config_deserialization() {
+        let toml_str = r#"
+            [platform]
+            ai_platform = "cursor"
+        "#;
+
+        let config: Config = toml::from_str(toml_str).unwrap();
+        assert_eq!(config.platform.ai_platform, AIPlatform::Cursor);
+    }
+
+    #[test]
+    fn test_all_platforms_deserialize() {
+        let platforms = vec!["claude", "gemini", "cursor", "windsurf"];
+        for platform in platforms {
+            let toml_str = format!(
+                r#"
+                [platform]
+                ai_platform = "{}"
+            "#,
+                platform
+            );
+            let config: Config = toml::from_str(&toml_str).unwrap();
+            assert!(matches!(
+                config.platform.ai_platform,
+                AIPlatform::Claude | AIPlatform::Gemini | AIPlatform::Cursor | AIPlatform::Windsurf
+            ));
+        }
+    }
 }

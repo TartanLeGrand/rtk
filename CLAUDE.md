@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Note**: RTK now supports multiple AI platforms (Claude, Gemini, Cursor, Windsurf) through the `platform.ai_platform` configuration. See config.rs for details.
+
 ## Project Overview
 
 **rtk (Rust Token Killer)** is a high-performance CLI proxy that minimizes LLM token consumption by filtering and compressing command outputs. It achieves 60-90% token savings on common development operations through smart filtering, grouping, truncation, and deduplication.

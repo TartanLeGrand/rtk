@@ -419,6 +419,28 @@ database_path = "/path/to/custom.db"
 
 Priority: `RTK_DB_PATH` env var > `config.toml` > default location.
 
+### AI Platform Configuration
+
+RTK now supports multiple AI coding assistants. Configure your platform in `~/.config/rtk/config.toml`:
+
+```toml
+[platform]
+# Supported values: claude, gemini, cursor, windsurf
+ai_platform = "claude"  # Default
+```
+
+**Supported Platforms:**
+- **claude** (default) - Anthropic Claude Code (fully supported)
+- **gemini** - Google Gemini Code Assist (planned)
+- **cursor** - Cursor AI (planned)  
+- **windsurf** - Windsurf (planned)
+
+**Current Status:**
+- ✅ **Claude Code**: Full integration with hooks, session discovery, and command tracking
+- 🚧 **Gemini/Cursor/Windsurf**: Infrastructure in place, implementation in progress
+
+To use RTK with Claude Code (default), no configuration needed. For other platforms, set `ai_platform` in your config file. Note that non-Claude platforms are not yet fully implemented.
+
 ### Tee: Full Output Recovery
 
 When RTK filters command output, LLM agents lose failure details (stack traces, assertion messages) and may re-run the same command 2-3 times. The **tee** feature saves raw output to a file so the agent can read it without re-executing.

@@ -5,9 +5,11 @@ mod report;
 use anyhow::Result;
 use std::collections::HashMap;
 
-use provider::{ClaudeProvider, SessionProvider};
+use provider::{ClaudeProvider, CursorProvider, GeminiProvider, SessionProvider, WindsurfProvider};
 use registry::{category_avg_tokens, classify_command, split_command_chain, Classification};
 use report::{DiscoverReport, SupportedEntry, UnsupportedEntry};
+
+use crate::config::{AIPlatform, Config};
 
 /// Aggregation bucket for supported commands.
 struct SupportedBucket {
@@ -34,7 +36,20 @@ pub fn run(
     format: &str,
     verbose: u8,
 ) -> Result<()> {
-    let provider = ClaudeProvider;
+    // Load config to determine which AI platform to use
+    let config = Config::load().unwrap_or_else(|e| {
+        if verbose > 0 {
+            eprintln!("Warning: Failed to load config ({}), using defaults", e);
+        }
+        Config::default()
+    });
+
+    let provider: Box<dyn SessionProvider> = match config.platform.ai_platform {
+        AIPlatform::Claude => Box::new(ClaudeProvider),
+        AIPlatform::Gemini => Box::new(GeminiProvider),
+        AIPlatform::Cursor => Box::new(CursorProvider),
+        AIPlatform::Windsurf => Box::new(WindsurfProvider),
+    };
 
     // Determine project filter
     let project_filter = if all {
@@ -45,7 +60,7 @@ pub fn run(
         // Default: current working directory
         let cwd = std::env::current_dir()?;
         let cwd_str = cwd.to_string_lossy().to_string();
-        let encoded = ClaudeProvider::encode_project_path(&cwd_str);
+        let encoded = provider.encode_project_path(&cwd_str);
         Some(encoded)
     };
 

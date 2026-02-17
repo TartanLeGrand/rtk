@@ -21,7 +21,7 @@ pub struct ExtractedCommand {
     pub sequence_index: usize,
 }
 
-/// Trait for session providers (Claude Code, future: Cursor, Windsurf).
+/// Trait for session providers (Claude Code, Gemini, Cursor, Windsurf).
 pub trait SessionProvider {
     fn discover_sessions(
         &self,
@@ -29,9 +29,15 @@ pub trait SessionProvider {
         since_days: Option<u64>,
     ) -> Result<Vec<PathBuf>>;
     fn extract_commands(&self, path: &Path) -> Result<Vec<ExtractedCommand>>;
+    fn name(&self) -> &'static str;
+    /// Encode a project path to the provider's directory naming format
+    fn encode_project_path(&self, path: &str) -> String;
 }
 
 pub struct ClaudeProvider;
+pub struct GeminiProvider;
+pub struct CursorProvider;
+pub struct WindsurfProvider;
 
 impl ClaudeProvider {
     /// Get the base directory for Claude Code projects.
@@ -231,6 +237,108 @@ impl SessionProvider for ClaudeProvider {
         }
 
         Ok(commands)
+    }
+
+    fn name(&self) -> &'static str {
+        "Claude Code"
+    }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        Self::encode_project_path(path)
+    }
+}
+
+// Gemini Code Assist Provider (Google Cloud)
+impl SessionProvider for GeminiProvider {
+    fn discover_sessions(
+        &self,
+        _project_filter: Option<&str>,
+        _since_days: Option<u64>,
+    ) -> Result<Vec<PathBuf>> {
+        // TODO: Implement Gemini session discovery
+        // Gemini Code Assist stores sessions in a different location/format
+        // For now, return empty list
+        anyhow::bail!(
+            "Gemini Code Assist integration not yet implemented.\n\
+             Set platform.ai_platform = \"claude\" in config.toml to use Claude Code."
+        )
+    }
+
+    fn extract_commands(&self, _path: &Path) -> Result<Vec<ExtractedCommand>> {
+        // TODO: Implement Gemini command extraction
+        anyhow::bail!("Gemini Code Assist integration not yet implemented")
+    }
+
+    fn name(&self) -> &'static str {
+        "Gemini Code Assist"
+    }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        // TODO: Implement Gemini-specific path encoding when session format is known
+        // For now, return raw path as we don't know Gemini's storage structure
+        path.to_string()
+    }
+}
+
+// Cursor AI Provider
+impl SessionProvider for CursorProvider {
+    fn discover_sessions(
+        &self,
+        _project_filter: Option<&str>,
+        _since_days: Option<u64>,
+    ) -> Result<Vec<PathBuf>> {
+        // TODO: Implement Cursor session discovery
+        // Cursor likely stores sessions in ~/.cursor/ or similar
+        // For now, return empty list
+        anyhow::bail!(
+            "Cursor AI integration not yet implemented.\n\
+             Set platform.ai_platform = \"claude\" in config.toml to use Claude Code."
+        )
+    }
+
+    fn extract_commands(&self, _path: &Path) -> Result<Vec<ExtractedCommand>> {
+        // TODO: Implement Cursor command extraction
+        anyhow::bail!("Cursor AI integration not yet implemented")
+    }
+
+    fn name(&self) -> &'static str {
+        "Cursor AI"
+    }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        // TODO: Implement Cursor-specific path encoding when session format is known
+        // For now, return raw path as we don't know Cursor's storage structure
+        path.to_string()
+    }
+}
+
+// Windsurf Provider
+impl SessionProvider for WindsurfProvider {
+    fn discover_sessions(
+        &self,
+        _project_filter: Option<&str>,
+        _since_days: Option<u64>,
+    ) -> Result<Vec<PathBuf>> {
+        // TODO: Implement Windsurf session discovery
+        anyhow::bail!(
+            "Windsurf integration not yet implemented.\n\
+             Set platform.ai_platform = \"claude\" in config.toml to use Claude Code."
+        )
+    }
+
+    fn extract_commands(&self, _path: &Path) -> Result<Vec<ExtractedCommand>> {
+        // TODO: Implement Windsurf command extraction
+        anyhow::bail!("Windsurf integration not yet implemented")
+    }
+
+    fn name(&self) -> &'static str {
+        "Windsurf"
+    }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        // TODO: Implement Windsurf-specific path encoding when session format is known
+        // For now, return raw path as we don't know Windsurf's storage structure
+        path.to_string()
     }
 }
 
