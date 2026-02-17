@@ -274,7 +274,8 @@ impl SessionProvider for GeminiProvider {
     }
 
     fn encode_project_path(&self, path: &str) -> String {
-        // TODO: Implement Gemini-specific path encoding
+        // TODO: Implement Gemini-specific path encoding when session format is known
+        // For now, return raw path as we don't know Gemini's storage structure
         path.to_string()
     }
 }
@@ -305,7 +306,8 @@ impl SessionProvider for CursorProvider {
     }
 
     fn encode_project_path(&self, path: &str) -> String {
-        // TODO: Implement Cursor-specific path encoding
+        // TODO: Implement Cursor-specific path encoding when session format is known
+        // For now, return raw path as we don't know Cursor's storage structure
         path.to_string()
     }
 }
@@ -334,7 +336,8 @@ impl SessionProvider for WindsurfProvider {
     }
 
     fn encode_project_path(&self, path: &str) -> String {
-        // TODO: Implement Windsurf-specific path encoding
+        // TODO: Implement Windsurf-specific path encoding when session format is known
+        // For now, return raw path as we don't know Windsurf's storage structure
         path.to_string()
     }
 }

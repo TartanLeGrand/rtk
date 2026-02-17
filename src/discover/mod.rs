@@ -37,7 +37,12 @@ pub fn run(
     verbose: u8,
 ) -> Result<()> {
     // Load config to determine which AI platform to use
-    let config = Config::load().unwrap_or_default();
+    let config = Config::load().unwrap_or_else(|e| {
+        if verbose > 0 {
+            eprintln!("Warning: Failed to load config ({}), using defaults", e);
+        }
+        Config::default()
+    });
 
     let provider: Box<dyn SessionProvider> = match config.platform.ai_platform {
         AIPlatform::Claude => Box::new(ClaudeProvider),
