@@ -5,6 +5,17 @@ All notable changes to rtk (Rust Token Killer) will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Features
+
+* **platform:** add multi-platform AI assistant support infrastructure
+  - Added `platform.ai_platform` configuration (claude, gemini, cursor, windsurf)
+  - Implemented SessionProvider trait for Gemini, Cursor, and Windsurf
+  - Added config.toml.example with platform configuration examples
+  - Discover command now respects configured AI platform
+  - Providers return helpful error messages for non-Claude platforms
+
 ## [0.20.0](https://github.com/rtk-ai/rtk/compare/v0.19.0...v0.20.0) (2026-02-16)
 
 

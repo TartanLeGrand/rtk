@@ -205,10 +205,7 @@ mod tests {
             let config: Config = toml::from_str(&toml_str).unwrap();
             assert!(matches!(
                 config.platform.ai_platform,
-                AIPlatform::Claude
-                    | AIPlatform::Gemini
-                    | AIPlatform::Cursor
-                    | AIPlatform::Windsurf
+                AIPlatform::Claude | AIPlatform::Gemini | AIPlatform::Cursor | AIPlatform::Windsurf
             ));
         }
     }
