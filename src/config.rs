@@ -2,6 +2,35 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[serde(rename_all = "lowercase")]
+pub enum AIPlatform {
+    Claude,
+    Gemini,
+    Cursor,
+    Windsurf,
+}
+
+impl Default for AIPlatform {
+    fn default() -> Self {
+        AIPlatform::Claude
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PlatformConfig {
+    /// Which AI coding assistant platform is being used
+    pub ai_platform: AIPlatform,
+}
+
+impl Default for PlatformConfig {
+    fn default() -> Self {
+        Self {
+            ai_platform: AIPlatform::Claude,
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Config {
     #[serde(default)]
@@ -12,6 +41,8 @@ pub struct Config {
     pub filters: FilterConfig,
     #[serde(default)]
     pub tee: crate::tee::TeeConfig,
+    #[serde(default)]
+    pub platform: PlatformConfig,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
