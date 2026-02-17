@@ -55,8 +55,7 @@ pub fn run(
         // Default: current working directory
         let cwd = std::env::current_dir()?;
         let cwd_str = cwd.to_string_lossy().to_string();
-        // Note: project path encoding is provider-specific, but we use Claude's for now
-        let encoded = ClaudeProvider::encode_project_path(&cwd_str);
+        let encoded = provider.encode_project_path(&cwd_str);
         Some(encoded)
     };
 

@@ -31,8 +31,8 @@ max_file_size = 1048576  # 1MB
 # Platform configuration (NEW)
 [platform]
 # Supported AI coding assistant platforms:
-# - "claude"    : Anthropic Claude Code (fully supported)
-# - "gemini"    : Google Gemini Code Assist (planned)
-# - "cursor"    : Cursor AI (planned)
-# - "windsurf"  : Windsurf (planned)
+# - "claude"   : Anthropic Claude Code (fully supported)
+# - "gemini"   : Google Gemini Code Assist (planned)
+# - "cursor"   : Cursor AI (planned)
+# - "windsurf" : Windsurf (planned)
 ai_platform = "claude"

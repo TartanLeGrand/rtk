@@ -30,6 +30,8 @@ pub trait SessionProvider {
     ) -> Result<Vec<PathBuf>>;
     fn extract_commands(&self, path: &Path) -> Result<Vec<ExtractedCommand>>;
     fn name(&self) -> &'static str;
+    /// Encode a project path to the provider's directory naming format
+    fn encode_project_path(&self, path: &str) -> String;
 }
 
 pub struct ClaudeProvider;
@@ -240,6 +242,10 @@ impl SessionProvider for ClaudeProvider {
     fn name(&self) -> &'static str {
         "Claude Code"
     }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        Self::encode_project_path(path)
+    }
 }
 
 // Gemini Code Assist Provider (Google Cloud)
@@ -265,6 +271,11 @@ impl SessionProvider for GeminiProvider {
 
     fn name(&self) -> &'static str {
         "Gemini Code Assist"
+    }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        // TODO: Implement Gemini-specific path encoding
+        path.to_string()
     }
 }
 
@@ -292,6 +303,11 @@ impl SessionProvider for CursorProvider {
     fn name(&self) -> &'static str {
         "Cursor AI"
     }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        // TODO: Implement Cursor-specific path encoding
+        path.to_string()
+    }
 }
 
 // Windsurf Provider
@@ -315,6 +331,11 @@ impl SessionProvider for WindsurfProvider {
 
     fn name(&self) -> &'static str {
         "Windsurf"
+    }
+
+    fn encode_project_path(&self, path: &str) -> String {
+        // TODO: Implement Windsurf-specific path encoding
+        path.to_string()
     }
 }
 
