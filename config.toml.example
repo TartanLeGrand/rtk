@@ -1,0 +1,38 @@
+# RTK Configuration Example
+# Copy to ~/.config/rtk/config.toml and customize
+
+# Tracking configuration
+[tracking]
+enabled = true
+history_days = 90
+# Optional: custom database path
+# database_path = "/path/to/custom.db"
+
+# Display configuration
+[display]
+colors = true
+emoji = true
+max_width = 120
+
+# Filter configuration
+[filters]
+ignore_dirs = [".git", "node_modules", "target", "__pycache__", ".venv", "vendor"]
+ignore_files = ["*.lock", "*.min.js", "*.min.css"]
+
+# Tee configuration (output recovery on failures)
+[tee]
+enabled = true
+mode = "failures"  # "failures", "always", or "never"
+max_files = 20
+max_file_size = 1048576  # 1MB
+# Optional: custom directory
+# directory = "/custom/path"
+
+# Platform configuration (NEW)
+[platform]
+# Supported AI coding assistant platforms:
+# - "claude"    : Anthropic Claude Code (fully supported)
+# - "gemini"    : Google Gemini Code Assist (planned)
+# - "cursor"    : Cursor AI (planned)
+# - "windsurf"  : Windsurf (planned)
+ai_platform = "claude"
